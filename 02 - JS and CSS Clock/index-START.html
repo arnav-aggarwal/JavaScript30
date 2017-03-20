@@ -62,63 +62,34 @@
       background:black;
       position: absolute;
       top:50%;
+      transform-origin: right;
     }
 
   </style>
 
   <script>
-    function getTime() {
-      const date = new Date();
-      const hours = date.getHours() % 12;
-      const minutes = date.getMinutes();
-      const seconds = date.getSeconds();
-      console.log(`${hours}:${minutes}:${seconds}`);
+      const secondHand = document.querySelector('.second-hand');
+      const minuteHand = document.querySelector('.min-hand');
+      const hourHand = document.querySelector('.hour-hand');
 
-      return { hours, minutes, seconds };    
-    }
+      function setTime() {
+        const date = new Date();
+        const hours = date.getHours() % 12;
+        const minutes = date.getMinutes();
+        const seconds = date.getSeconds();
 
-    const { hours, minutes, seconds } = getTime();
+        const offset = 90;
+        const secondDegrees = offset + 6 * seconds;
+        const minuteDegrees = offset + 6 * minutes + secondDegrees / 60;
+        const hourDegrees = offset + 6 * hours + minuteDegrees / 12;
 
-    const allHands = [...document.querySelectorAll('.hand')];
-    allHands.forEach(hand => hand.style.transformOrigin = 'right');
+        secondHand.style.transform = `rotate(${secondDegrees}deg)`;
+        minuteHand.style.transform = `rotate(${minuteDegrees}deg)`;
+        hourHand.style.transform = `rotate(${hourDegrees}deg)`;
+      }
 
-    const secondHand = document.querySelector('.second-hand');
-    const minuteHand = document.querySelector('.min-hand');
-    const hourHand = document.querySelector('.hour-hand');
-
-    function getTransformString(degrees) {
-      return `rotate(${degrees}deg)`;
-    }
-
-    const offset = 90;
-
-    let secondDegrees = offset + 6 * seconds;
-    let minuteDegrees = offset + 6 * minutes;
-    let hourDegrees = offset + 6 * hours;
-
-    secondHand.style.transform = getTransformString(secondDegrees);
-    minuteHand.style.transform = getTransformString(minuteDegrees);
-    hourHand.style.transform = getTransformString(hourDegrees);
-
-    const secondHandIncrement = 360 / 60;
-    const minuteHandIncrement = secondHandIncrement / 60;
-    const hourHandIncrement = minuteHandIncrement / 12;
-
-    function incrementDegrees() {
-      secondDegrees = (secondDegrees + secondHandIncrement) % 360;
-      minuteDegrees = (minuteDegrees + minuteHandIncrement) % 360;
-      hourDegrees = (hourDegrees + hourHandIncrement) % 360;
-    }
-
-    function rotateHands() {
-      incrementDegrees();
-      secondHand.style.transform = getTransformString(secondDegrees);
-      minuteHand.style.transform = getTransformString(minuteDegrees);
-      hourHand.style.transform = getTransformString(hourDegrees);
-    }
-
-    setInterval(rotateHands, 1000);
-
+    setTime();
+    setInterval(setTime, 1000);
   </script>
 </body>
 </html>
