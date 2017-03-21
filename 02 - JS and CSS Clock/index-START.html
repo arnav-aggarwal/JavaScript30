@@ -77,9 +77,10 @@
         const hours = date.getHours() % 12;
         const minutes = date.getMinutes();
         const seconds = date.getSeconds();
+        const milliseconds = date.getMilliseconds();
 
         const offset = 90;
-        const secondDegrees = offset + 6 * seconds;
+        const secondDegrees = offset + 6 * (seconds + milliseconds / 1000);
         const minuteDegrees = offset + 6 * minutes + secondDegrees / 60;
         const hourDegrees = offset + 6 * hours + minuteDegrees / 12;
 
@@ -89,7 +90,7 @@
       }
 
     setTime();
-    setInterval(setTime, 1000);
+    setInterval(setTime, 100);
   </script>
 </body>
 </html>
